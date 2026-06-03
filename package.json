@@ -1,0 +1,33 @@
+{
+  "name": "pi-operator-tickets",
+  "version": "1.0.0",
+  "description": "Create bounded, proof-driven Operator Tickets for complex AI-agent tasks",
+  "keywords": [
+    "pi-package",
+    "operator-tickets"
+  ],
+  "files": [
+    "src",
+    "skills/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/extension.ts"
+    ],
+    "skills": [
+      "./skills/pi-operator-tickets/SKILL.md"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "scripts": {
+    "typecheck": "npx tsc --noEmit",
+    "test": "node src/validate.test.js"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

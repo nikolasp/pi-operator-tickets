@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "presets": [
+    {
+      "id": "migration",
+      "name": "Migration Ticket",
+      "description": "Move your codebase from one framework or library to another while keeping behavior identical.",
+      "category": "coding",
+      "tags": ["migration", "library", "framework"],
+      "placeholders": [
+        { "key": "SOURCE LIBRARY", "label": "Source Library", "description": "The library or framework being migrated away from", "required": true },
+        { "key": "TARGET LIBRARY", "label": "Target Library", "description": "The library or framework being migrated to", "required": true },
+        { "key": "YOUR TEST COMMAND", "label": "Test Command", "description": "Command that runs all tests and exits 0 on success", "required": true },
+        { "key": "PROTECTED DIRECTORY", "label": "Protected Directory", "description": "Directory that must not be touched during migration", "required": false }
+      ],
+      "sections": {
+        "goal": "Migrate [SOURCE LIBRARY] to [TARGET LIBRARY] across the entire codebase. The job is done when every condition below is met.",
+        "order": [
+          "Every import of [SOURCE LIBRARY] is replaced with the equivalent [TARGET LIBRARY] import.",
+          "All existing functionality continues to work without behavior changes."
+        ],
+        "proof": [
+          "[YOUR TEST COMMAND] exits 0.",
+          "grep -r \"[SOURCE LIBRARY]\" src/ returns zero matches.",
+          "The build completes without errors."
+        ],
+        "boundary": [
+          "Do not modify any test files.",
+          "Do not change behavior of any function. Migration only, not refactoring.",
+          "Do not touch [PROTECTED DIRECTORY]."
+        ],
+        "budget": "Stop after 30 turns OR 60 minutes, whichever hits first.",
+        "fallback": [
+          "If blocked on the same error 3 times in a row, write the error to ERROR.md and exit.",
+          "If a [SOURCE LIBRARY] feature has no equivalent, log it to MIGRATION_GAPS.md and continue."
+        ]
+      }
+    },
+    {
+      "id": "bug-hunt",
+      "name": "Bug Hunt Ticket",
+      "description": "Find and fix failing tests in a target directory without touching production code logic.",
+      "category": "coding",
+      "tags": ["bug", "test", "debug"],
+      "placeholders": [
+        { "key": "TARGET DIRECTORY", "label": "Target Directory", "description": "Directory containing the failing tests", "required": true },
+        { "key": "TEST COMMAND", "label": "Test Command", "description": "Command that runs tests in the target directory", "required": true },
+        { "key": "PROTECTED FILES", "label": "Protected Files", "description": "Files that must not be modified", "required": false }
+      ],
+      "sections": {
+        "goal": "Get all tests in [TARGET DIRECTORY] passing without modifying core business logic.",
+        "order": [
+          "All tests in [TARGET DIRECTORY] pass when running [TEST COMMAND].",
+          "The root cause is identified, not just patched over."
+        ],
+        "proof": [
+          "[TEST COMMAND] in [TARGET DIRECTORY] exits 0.",
+          "git diff shows changes only in fix-related files, no test deletions."
+        ],
+        "boundary": [
+          "Do not delete failing tests.",
+          "Do not skip failing tests with .skip or pytest marks.",
+          "Do not modify [PROTECTED FILES]."
+        ],
+        "budget": "Stop after 20 turns OR 30 minutes, whichever hits first.",
+        "fallback": [
+          "If the root cause is not found after 5 turns, write the current hypothesis and what was tried to BUG_REPORT.md and exit."
+        ]
+      }
+    },
+    {
+      "id": "coverage-climber",
+      "name": "Coverage Climber",
+      "description": "Raise test coverage to a target percentage without modifying production code.",
+      "category": "coding",
+      "tags": ["coverage", "test", "quality"],
+      "placeholders": [
+        { "key": "TARGET MODULE", "label": "Target Module", "description": "The module whose coverage should be raised", "required": true },
+        { "key": "TARGET PERCENTAGE", "label": "Target Percentage", "description": "Target coverage percentage, e.g. 80", "required": true },
+        { "key": "COVERAGE COMMAND", "label": "Coverage Command", "description": "Command that reports coverage for the target module", "required": true }
+      ],
+      "sections": {
+        "goal": "Raise test coverage on [TARGET MODULE] to [TARGET PERCENTAGE]%.",
+        "order": [
+          "Add tests until coverage on [TARGET MODULE] is at or above [TARGET PERCENTAGE]%.",
+          "New tests must test real behavior, not just hit lines."
+        ],
+        "proof": [
+          "[COVERAGE COMMAND] reports coverage at or above [TARGET PERCENTAGE]% on [TARGET MODULE].",
+          "All existing tests still pass.",
+          "Each new test contains at least one meaningful assertion."
+        ],
+        "boundary": [
+          "Do not modify production code in [TARGET MODULE].",
+          "Do not modify existing tests.",
+          "Do not write tests that only assert True or invoke functions without checking output."
+        ],
+        "budget": "Stop after 25 turns OR 45 minutes, whichever hits first.",
+        "fallback": [
+          "If [TARGET PERCENTAGE]% is unreachable without changing production code, write the gap analysis to COVERAGE_GAPS.md and exit at whatever coverage was achieved."
+        ]
+      }
+    },
+    {
+      "id": "refactor",
+      "name": "Refactor Ticket",
+      "description": "Reduce duplication in a target module by merging similar functions, with tests as the proof gate.",
+      "category": "coding",
+      "tags": ["refactor", "duplication", "cleanup"],
+      "placeholders": [
+        { "key": "TARGET MODULE", "label": "Target Module", "description": "The module to refactor", "required": true },
+        { "key": "TEST COMMAND", "label": "Test Command", "description": "Command that runs all tests", "required": true }
+      ],
+      "sections": {
+        "goal": "Reduce code duplication in [TARGET MODULE] by merging functions with high structural overlap.",
+        "order": [
+          "Identify functions in [TARGET MODULE] that share at least 70% of their structure.",
+          "Merge them into a single function with appropriate parameters.",
+          "Update all call sites to use the new merged function."
+        ],
+        "proof": [
+          "All existing tests still pass when running [TEST COMMAND].",
+          "Line count in [TARGET MODULE] is lower than before.",
+          "No function with >70% overlap remains."
+        ],
+        "boundary": [
+          "Do not change function behavior, only structure.",
+          "Do not modify any test files.",
+          "Do not refactor across module boundaries."
+        ],
+        "budget": "Stop after 20 turns OR 40 minutes, whichever hits first.",
+        "fallback": [
+          "If a merge breaks tests, revert with git restore and try a different candidate.",
+          "If 5 attempted merges all fail, write a list of duplicate candidates to REFACTOR_CANDIDATES.md and exit."
+        ]
+      }
+    }
+  ]
+}
