@@ -75,6 +75,13 @@ Manage saved presets with `/ticket presets`.
 3. One ticket = one job.
 4. Bake the budget into the ticket itself.
 
+## Credits
+
+This package builds on the Operator Ticket approach and examples provided by Daniel Jindoo.
+
+- Website: [DOO MADE](https://www.doomade.com/)
+- YouTube: [@Jinni_Doo](https://www.youtube.com/@Jinni_Doo)
+
 ## License
 
 MIT
