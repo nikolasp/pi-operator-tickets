@@ -48,7 +48,7 @@ export default function (pi: ExtensionAPI) {
 
 // ── Command Handler ──────────────────────────────────────────────────
 
-async function handleTicketCommand(args: string, ctx: any): Promise<void> {
+export async function handleTicketCommand(args: string, ctx: any): Promise<void> {
   const trimmed = args?.trim() ?? '';
 
   // /ticket presets — manage saved presets
@@ -81,7 +81,7 @@ async function handleTicketCommand(args: string, ctx: any): Promise<void> {
 
 // ── Picker ────────────────────────────────────────────────────────────
 
-async function openPicker(ctx: any, filter?: string): Promise<void> {
+export async function openPicker(ctx: any, filter?: string): Promise<void> {
   // Surface preset loading warnings
   const presLoadWarnings = getLoadWarnings();
   if (presLoadWarnings.length > 0) {
@@ -139,7 +139,7 @@ async function openPicker(ctx: any, filter?: string): Promise<void> {
 
 // ── Wizard ────────────────────────────────────────────────────────────
 
-async function runWizard(ctx: any, preset: any | null, loaded?: LoadedPreset): Promise<void> {
+export async function runWizard(ctx: any, preset: any | null, loaded?: LoadedPreset): Promise<void> {
   const placeholders: Record<string, string> = {};
 
   // ---- Step 1: Fill placeholders (preset only) ----
@@ -292,7 +292,7 @@ type SelectItem<T extends string> = {
  * ctx.ui.select currently accepts string options only. Keep values separate
  * so the TUI renders useful labels instead of object stringification.
  */
-async function selectMapped<T extends string>(ctx: any, title: string, items: SelectItem<T>[]): Promise<T | undefined> {
+export async function selectMapped<T extends string>(ctx: any, title: string, items: SelectItem<T>[]): Promise<T | undefined> {
   const labels: string[] = [];
   const labelCounts = new Map<string, number>();
   const valueByLabel = new Map<string, T>();
@@ -310,13 +310,13 @@ async function selectMapped<T extends string>(ctx: any, title: string, items: Se
   return choice ? valueByLabel.get(choice) : undefined;
 }
 
-function substitute(text: string, placeholders: Record<string, string>): string {
+export function substitute(text: string, placeholders: Record<string, string>): string {
   return text.replace(/\[([A-Z][A-Z0-9_ ]+)\]/g, (_, key) => {
     return placeholders[key] ?? `[${key}]`;
   });
 }
 
-function buildTicket(sections: Record<TicketSection, string>): OperatorTicket {
+export function buildTicket(sections: Record<TicketSection, string>): OperatorTicket {
   const splitLines = (text: string): string[] => {
     return text
       .split('\n')
@@ -355,7 +355,7 @@ async function insertIntoEditor(ctx: any, text: string): Promise<void> {
   }
 }
 
-async function saveCustomAsPreset(ctx: any, ticket: OperatorTicket): Promise<void> {
+export async function saveCustomAsPreset(ctx: any, ticket: OperatorTicket): Promise<void> {
   const name = await ctx.ui.input('Preset name:', 'My Custom Ticket');
   if (!name) return;
 

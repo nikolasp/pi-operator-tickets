@@ -25,9 +25,13 @@
   },
   "scripts": {
     "typecheck": "npx tsc --noEmit",
-    "test": "node src/validate.test.js"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
-    "typescript": "^6.0.3"
+    "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "^4.1.8",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
   }
 }
